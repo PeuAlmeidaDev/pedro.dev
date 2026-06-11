@@ -1,8 +1,7 @@
 import type { Experience } from '../types'
 
 /**
- * "Jornada" — trajetória profissional, em fases.
- * ⚠️ Placeholder vindo do design original — trocar pela trajetória real (Fase 5).
+ * "Jornada" — trajetória real do Pedro, em fases.
  */
 export const experiences: Experience[] = [
   {
@@ -47,12 +46,22 @@ export const experiences: Experience[] = [
   },
   {
     phase: 'FASE 05',
-    title: '??? Próxima missão',
-    org: 'Em busca',
-    year: '2025+',
-    desc: 'Procurando o próximo desafio fullstack para upar de nível.',
-    xp: 0,
+    title: 'Integrando o Time de Desenvolvimento',
+    org: '',
+    year: '2024.2 — hoje',
+    desc: 'Oficialmente no time de desenvolvimento, criando aplicações reais para a empresa, resolvendo problemas do negócio e construindo dashboards.',
+    xp: 1500,
     done: false,
     current: true,
+  },
+  {
+    phase: 'FASE 06',
+    title: '??? Próxima missão',
+    org: '',
+    year: 'Em breve',
+    desc: 'O próximo grande desafio fullstack — sempre buscando upar de nível.',
+    xp: 0,
+    done: false,
+    current: false,
   },
 ]

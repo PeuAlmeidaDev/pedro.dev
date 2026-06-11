@@ -16,13 +16,19 @@ export default function Experience() {
 
         <div className="flex flex-col gap-[18px]">
           {experiences.map((ex) => {
-            const accent = ex.current ? 'var(--color-gold)' : 'var(--color-emerald)'
+            // fase futura: ainda não concluída e não é a atual
+            const isUpcoming = !ex.done && !ex.current
+            const accent = ex.current
+              ? 'var(--color-gold)'
+              : isUpcoming
+                ? 'var(--color-violet)'
+                : 'var(--color-emerald)'
             const dotBg = ex.current
               ? 'var(--color-gold)'
               : ex.done
                 ? 'var(--color-emerald)'
                 : 'var(--color-edge)'
-            const statusLabel = ex.current ? 'EM PROGRESSO' : 'CONCLUÍDA'
+            const statusLabel = ex.current ? 'EM PROGRESSO' : isUpcoming ? '???' : 'CONCLUÍDA'
 
             return (
               <div key={ex.phase} className="relative">

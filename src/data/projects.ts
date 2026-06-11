@@ -44,4 +44,14 @@ export const projects: Project[] = [
     demoUrl: 'https://lotericacentral.up.railway.app/',
     // repoUrl: privado (404) — adicionar quando o repositório for público
   },
+  // Este próprio portfólio (meta).
+  {
+    name: 'PORTFÓLIO RPG',
+    desc: 'Este próprio site: um portfólio com tema de RPG/arcade que apresenta minha jornada como dev. Migrado de um design gerado por IA para uma base React própria — componentes tipados, tema retro/modern e mídia otimizada.',
+    tech: ['Vite', 'React', 'TypeScript', 'Tailwind'],
+    status: 'EM PROGRESSO',
+    xp: 1000,
+    // demoUrl: adicionar após o deploy (Vercel/Netlify)
+    // repoUrl: adicionar após publicar no GitHub
+  },
 ]

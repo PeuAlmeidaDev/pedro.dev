@@ -14,12 +14,22 @@ export interface Stat {
   value: string
 }
 
+/** "Buff" opcional num atributo — efeito de status pulsante (ex: ☕ capuccino). */
+export interface AttributeBuff {
+  icon: string
+  label: string
+  bonus: string
+  /** token de cor do tema (ex: 'coffee') */
+  color: string
+}
+
 export interface Attribute {
   label: string
   /** 0–100 */
   value: number
   /** cor do token de tema (ex: 'cyan', 'violet') ou hex */
   color: string
+  buff?: AttributeBuff
 }
 
 export interface Achievement {

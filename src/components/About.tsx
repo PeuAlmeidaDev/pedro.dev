@@ -56,24 +56,51 @@ export default function About() {
             <div className="flex flex-col gap-4">
               {attributes.map((at) => {
                 const color = `var(--color-${at.color})`
+                const buffColor = at.buff ? `var(--color-${at.buff.color})` : ''
                 return (
                   <div key={at.label}>
-                    <div className="mb-1.5 flex justify-between">
-                      <span className="font-pixel text-[8px] text-ink-soft">{at.label}</span>
-                      <span className="font-pixel text-[8px]" style={{ color }}>
-                        {at.value}
-                      </span>
+                    <div className="mb-1.5 flex justify-between font-pixel text-[8px]">
+                      <span className="text-ink-soft">{at.label}</span>
+                      <span style={{ color }}>{at.value}</span>
                     </div>
-                    <div className="h-3.5 border-2 border-line bg-[#0e0a18] p-0.5">
+                    <div className="flex h-3.5 items-stretch border-2 border-line bg-[#0e0a18] p-0.5">
+                      {/* segmento base (cafeína real) */}
                       <div
-                        className="h-full"
                         style={{
                           width: `${at.value}%`,
+                          minWidth: at.value > 0 ? '4px' : 0,
                           background: color,
                           boxShadow: `0 0 8px ${color}`,
                         }}
                       />
+                      {at.buff && (
+                        <>
+                          {/* divisor "/" entre cafeína e capuccino */}
+                          <div className="w-[3px] shrink-0 bg-bg" />
+                          {/* segmento do buff (capuccino) — preenche o resto, pulsando */}
+                          <div
+                            className="flex-1 animate-buff"
+                            title={`Buff: ${at.buff.label} ${at.buff.bonus}`}
+                            style={{
+                              background: buffColor,
+                              boxShadow: `0 0 10px ${buffColor}`,
+                            }}
+                          />
+                        </>
+                      )}
                     </div>
+
+                    {at.buff && (
+                      <div
+                        className="mt-1 flex justify-between font-pixel text-[7px]"
+                        style={{ color: buffColor }}
+                      >
+                        <span>
+                          {at.buff.icon} BUFF {at.buff.label}
+                        </span>
+                        <span>{at.buff.bonus}</span>
+                      </div>
+                    )}
                   </div>
                 )
               })}

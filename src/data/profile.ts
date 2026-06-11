@@ -32,7 +32,12 @@ export const attributes: Attribute[] = [
   { label: 'LÓGICA', value: 88, color: 'cyan' },
   { label: 'CRIATIVIDADE', value: 82, color: 'violet' },
   { label: 'FOCO', value: 90, color: 'emerald' },
-  { label: 'CAFEÍNA', value: 99, color: 'pink' },
+  {
+    label: 'CAFEÍNA',
+    value: 10,
+    color: 'pink',
+    buff: { icon: '☕', label: 'CAPUCCINO', bonus: '+99', color: 'coffee' },
+  },
 ]
 
 export const achievements: Achievement[] = [

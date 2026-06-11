@@ -45,6 +45,6 @@ export const achievements: Achievement[] = [
   { icon: '⚔', name: 'Bug Slayer', desc: '100+ bugs eliminados', unlocked: true },
   { icon: '☾', name: 'Night Owl', desc: 'Deploy depois da meia-noite', unlocked: true },
   { icon: '⇪', name: 'Deploy Master', desc: '50+ deploys sem rollback', unlocked: true },
-  { icon: '⌬', name: 'Open Source', desc: 'Contribuições públicas', unlocked: true },
+  { icon: '⚙', name: 'Solver', desc: 'Resolvedor de problemas', unlocked: true },
   { icon: '?', name: '???', desc: 'Conquista secreta bloqueada', unlocked: false },
 ]

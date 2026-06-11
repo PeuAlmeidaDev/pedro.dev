@@ -25,6 +25,16 @@ export const projects: Project[] = [
     demoUrl: 'https://landingpage-lotericacentral-production.up.railway.app/',
     // repoUrl: privado (404) — adicionar quando o repositório for público
   },
+  // Projeto real — landing em produção (Vercel).
+  {
+    name: 'BEATRIZ STROBEL',
+    desc: 'Landing page para a esteticista Beatriz Strobel divulgar e vender seus atendimentos — vitrine de serviços com preços, depoimentos e agendamento direto por formulário de contato e WhatsApp.',
+    tech: ['Next.js', 'TypeScript', 'Tailwind', 'Vercel'],
+    status: 'COMPLETO',
+    xp: 700,
+    demoUrl: 'https://beatrizstrobel-estetica.vercel.app/',
+    repoUrl: 'https://github.com/PeuAlmeidaDev/beatrizstrobel-estetica',
+  },
   {
     name: 'NEON COMMERCE',
     desc: 'Plataforma de e-commerce com checkout em tempo real, carrinho persistente e painel administrativo completo.',

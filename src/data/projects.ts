@@ -12,6 +12,8 @@ export const projects: Project[] = [
     tech: ['Next.js', 'TypeScript', 'Socket.io', 'Prisma', 'PostgreSQL'],
     status: 'EM PROGRESSO',
     xp: 1500,
+    demoUrl: 'https://craftmind-production.up.railway.app/',
+    repoUrl: 'https://github.com/PeuAlmeidaDev/CraftMind',
   },
   {
     name: 'NEON COMMERCE',

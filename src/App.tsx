@@ -6,6 +6,7 @@ import MiniMap from './components/MiniMap'
 import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
+import Projects from './components/Projects'
 
 const SECTION_IDS = navItems.map((n) => n.id)
 
@@ -22,11 +23,12 @@ export default function App() {
         <Hero />
         <About />
         <Skills />
+        <Projects />
 
         {/* Seções ainda não migradas — placeholders para nav/scroll funcionarem.
             Serão substituídas nas próximas fases. */}
         {navItems
-          .filter((n) => !['home', 'about', 'skills'].includes(n.id))
+          .filter((n) => !['home', 'about', 'skills', 'projects'].includes(n.id))
           .map((n) => (
             <Placeholder key={n.id} id={n.id} label={n.label} />
           ))}

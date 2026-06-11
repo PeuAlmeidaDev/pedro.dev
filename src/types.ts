@@ -62,6 +62,10 @@ export interface Project {
   tech: string[]
   status: ProjectStatus
   xp: number
+  /** link da demo/produção (opcional até ter URL real) */
+  demoUrl?: string
+  /** link do repositório (opcional) */
+  repoUrl?: string
 }
 
 export interface Experience {

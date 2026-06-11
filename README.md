@@ -4,7 +4,7 @@ Portfólio pessoal em estilo **RPG retro / cyberpunk**: skills, projetos como _q
 a carreira como uma _jornada de fases_. Divertido na superfície, sólido por baixo — rápido,
 acessível e achável no Google.
 
-🔗 **Ao vivo:** _em breve_
+🔗 **Ao vivo:** [pedro-dev-chi.vercel.app](https://pedro-dev-chi.vercel.app/)
 
 ## Stack
 

@@ -5,6 +5,14 @@ import type { Project } from '../types'
  * ⚠️ Placeholder vindo do design original — trocar pelos projetos reais (Fase 5).
  */
 export const projects: Project[] = [
+  // Projeto real (../mindforge) — não é placeholder.
+  {
+    name: 'CRAFTMIND',
+    desc: 'Jogo multiplayer de batalha por turnos no navegador onde os hábitos saudáveis cumpridos na vida real evoluem os atributos do personagem. Quem vive melhor, joga melhor.',
+    tech: ['Next.js', 'TypeScript', 'Socket.io', 'Prisma', 'PostgreSQL'],
+    status: 'EM PROGRESSO',
+    xp: 1500,
+  },
   {
     name: 'NEON COMMERCE',
     desc: 'Plataforma de e-commerce com checkout em tempo real, carrinho persistente e painel administrativo completo.',

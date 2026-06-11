@@ -19,8 +19,10 @@ export default function Hero() {
           alt=""
           className="absolute inset-0 h-full w-full object-cover object-bottom [image-rendering:pixelated]"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,8,19,.45)_0%,rgba(11,8,19,.15)_35%,rgba(11,8,19,.55)_78%,rgba(11,8,19,.92)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(115%_90%_at_50%_42%,transparent_45%,rgba(11,8,19,.6)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,8,19,.7)_0%,rgba(11,8,19,.55)_35%,rgba(11,8,19,.72)_78%,rgba(11,8,19,.96)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(115%_90%_at_50%_42%,rgba(11,8,19,.25)_30%,rgba(11,8,19,.78)_100%)]" />
+        {/* scrim uniforme para garantir leitura do texto sobre a cidade */}
+        <div className="absolute inset-0 bg-bg/35" />
       </div>
 
       {/* moedas/pixels flutuantes */}

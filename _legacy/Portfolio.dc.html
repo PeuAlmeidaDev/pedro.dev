@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #0b0813; color: #e7e3f5; font-family: 'Space Grotesk', system-ui, sans-serif; overflow-x: hidden; }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @keyframes floaty2 { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+  @keyframes glowpulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+  @keyframes scandrift { from { background-position: 0 0; } to { background-position: 0 100vh; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes twinkle { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+  ::selection { background: #6d28d9; color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #0b0813; }
+  ::-webkit-scrollbar-thumb { background: #3a3360; border: 2px solid #0b0813; }
+  input, textarea, button, select { font-family: inherit; }
+  input::placeholder, textarea::placeholder { color: #5b5478; }
+</style>
+</helmet>
+
+<div style="position: relative; min-height: 100vh; cursor: {{ cursorStyle }};">
+
+  <div aria-hidden="true" style="position: fixed; inset: 0; z-index: 0; background: {{ baseBg }};"></div>
+
+  <sc-if value="{{ isRetro }}" hint-placeholder-val="{{ true }}">
+    <div aria-hidden="true" style="pointer-events: none; position: fixed; inset: 0; z-index: 80; background: repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0px, rgba(0,0,0,.16) 1px, transparent 2px, transparent 3px);"></div>
+    <div aria-hidden="true" style="pointer-events: none; position: fixed; inset: 0; z-index: 81; background: radial-gradient(125% 125% at 50% 50%, transparent 58%, rgba(0,0,0,.5) 100%);"></div>
+  </sc-if>
+
+  <!-- ===================== HUD ===================== -->
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 70; background: rgba(11,8,19,.9); border-bottom: 2px solid #2a2342; backdrop-filter: blur(8px);">
+    <div style="max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 14px; padding: 11px 18px;">
+      <button onClick="{{ onHome }}" style="display: flex; align-items: center; gap: 12px; background: none; border: none; cursor: inherit; padding: 0;">
+        <img src="assets/avatar.png" alt="" style="display: block; width: 34px; height: 34px; object-fit: cover; image-rendering: pixelated; border: 2px solid #a78bfa; box-shadow: 0 0 10px rgba(167,139,250,.5);">
+        <span style="font-family: 'Press Start 2P', monospace; font-size: 12px; color: #a78bfa; letter-spacing: 1px;">PEDRO<span style="color: #22d3ee;">.dev</span></span>
+      </button>
+
+      <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+        <nav style="margin-left: auto; display: flex; gap: 2px;">
+          <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+            <button onClick="{{ item.onClick }}" style="font-family: 'Press Start 2P', monospace; font-size: 9px; letter-spacing: 1px; color: {{ item.navColor }}; background: none; border: 2px solid {{ item.navBorder }}; padding: 9px 11px; cursor: inherit; transition: color .12s, border-color .12s;" style-hover="color: #67e8f9; border-color: #2a2342;">{{ item.mark }}{{ item.label }}</button>
+          </sc-for>
+        </nav>
+        <div style="display: flex; align-items: center; border: 2px solid #2a2342; background: #100c1c; padding: 3px;">
+          <button onClick="{{ setRetro }}" style="font-family: 'Press Start 2P', monospace; font-size: 8px; letter-spacing: 1px; color: {{ retroTabColor }}; background: {{ retroTabBg }}; border: none; padding: 7px 8px; cursor: inherit; transition: all .12s;">RETRO</button>
+          <button onClick="{{ setModern }}" style="font-family: 'Press Start 2P', monospace; font-size: 8px; letter-spacing: 1px; color: {{ modernTabColor }}; background: {{ modernTabBg }}; border: none; padding: 7px 8px; cursor: inherit; transition: all .12s;">MODERN</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleNav }}" aria-label="Menu" style="margin-left: auto; font-family: 'Press Start 2P', monospace; font-size: 10px; color: #22d3ee; background: #100c1c; border: 2px solid #22d3ee; padding: 9px 12px; cursor: inherit; box-shadow: 3px 3px 0 #06222b;">MENU</button>
+      </sc-if>
+    </div>
+    <div style="height: 5px; background: #100c1c; position: relative; overflow: hidden;">
+      <div style="height: 100%; width: {{ progressW }}; background: linear-gradient(90deg, #6d28d9, #22d3ee, #f472b6); box-shadow: 0 0 10px rgba(34,211,238,.6); transition: width .12s linear;"></div>
+    </div>
+  </header>
+
+  <!-- mobile menu -->
+  <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; top: 56px; left: 0; right: 0; z-index: 69; background: rgba(11,8,19,.98); border-bottom: 2px solid #2a2342; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+        <button onClick="{{ item.onClick }}" style="font-family: 'Press Start 2P', monospace; font-size: 11px; letter-spacing: 1px; color: {{ item.navColor }}; background: #14101f; border: 2px solid {{ item.navBorder }}; padding: 14px; cursor: inherit; text-align: left;">{{ item.mark }}{{ item.label }}</button>
+      </sc-for>
+      <div style="display: flex; gap: 8px; margin-top: 4px;">
+        <button onClick="{{ setRetro }}" style="flex: 1; font-family: 'Press Start 2P', monospace; font-size: 9px; color: {{ retroTabColor }}; background: {{ retroTabBg }}; border: 2px solid #22d3ee; padding: 12px; cursor: inherit;">RETRO</button>
+        <button onClick="{{ setModern }}" style="flex: 1; font-family: 'Press Start 2P', monospace; font-size: 9px; color: {{ modernTabColor }}; background: {{ modernTabBg }}; border: 2px solid #a78bfa; padding: 12px; cursor: inherit;">MODERN</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- side mini-map -->
+  <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <div style="position: fixed; right: 16px; top: 50%; transform: translateY(-50%); z-index: 60; display: flex; flex-direction: column; gap: 14px; align-items: flex-end;">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+        <button onClick="{{ item.onClick }}" title="{{ item.label }}" style="display: flex; align-items: center; gap: 8px; background: none; border: none; cursor: inherit; padding: 0;">
+          <span style="font-family: 'Press Start 2P', monospace; font-size: 7px; color: #22d3ee; text-shadow: 0 0 8px rgba(34,211,238,.5);">{{ item.mapLabel }}</span>
+          <span style="width: 10px; height: 10px; background: {{ item.mapDot }}; border: 2px solid {{ item.mapBorder }}; box-shadow: 0 0 8px {{ item.mapDot }}; transition: all .15s;"></span>
+        </button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <main style="position: relative; z-index: 10;">
+
+    <!-- ===================== HERO ===================== -->
+    <section id="home" data-screen-label="Início" style="position: relative; min-height: 100vh; overflow: hidden; display: flex; align-items: center;">
+      <!-- cyberpunk city backdrop (image) -->
+      <div aria-hidden="true" style="position: absolute; inset: 0; overflow: hidden; background: #0b0813;">
+        <img src="assets/city-bg.png" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; image-rendering: pixelated;">
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,8,19,.45) 0%, rgba(11,8,19,.15) 35%, rgba(11,8,19,.55) 78%, rgba(11,8,19,.92) 100%);"></div>
+        <div style="position: absolute; inset: 0; background: radial-gradient(115% 90% at 50% 42%, transparent 45%, rgba(11,8,19,.6) 100%);"></div>
+      </div>
+
+      <!-- floating pixel coins -->
+      <div aria-hidden="true" style="position: absolute; top: 26%; left: 9%; z-index: 5; animation: floaty 4s ease-in-out infinite;">
+        <div style="width: 26px; height: 26px; background: #fbbf24; border: 3px solid #b45309; box-shadow: 0 0 16px rgba(251,191,36,.6); display: flex; align-items: center; justify-content: center; font-family: 'Press Start 2P', monospace; font-size: 12px; color: #b45309;">$</div>
+      </div>
+      <div aria-hidden="true" style="position: absolute; bottom: 30%; right: 14%; z-index: 5; animation: floaty2 3.4s ease-in-out infinite;">
+        <div style="width: 22px; height: 22px; background: #22d3ee; border: 3px solid #0e7490; box-shadow: 0 0 16px rgba(34,211,238,.6);"></div>
+      </div>
+      <div aria-hidden="true" style="position: absolute; top: 38%; right: 22%; z-index: 5; animation: floaty 5s ease-in-out infinite;">
+        <div style="width: 18px; height: 18px; background: #f472b6; box-shadow: 0 0 16px rgba(244,114,182,.6); transform: rotate(45deg);"></div>
+      </div>
+
+      <!-- hero content -->
+      <div style="position: relative; z-index: 10; max-width: 1180px; margin: 0 auto; padding: 96px 22px 60px; width: 100%;">
+
+        <div style="display: flex; gap: 8px; margin-bottom: 26px;">
+          <button onClick="{{ setHeroA }}" style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: {{ heroAColor }}; background: {{ heroABg }}; border: 2px solid #22d3ee; padding: 8px 10px; cursor: inherit;">LAYOUT A</button>
+          <button onClick="{{ setHeroB }}" style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: {{ heroBColor }}; background: {{ heroBBg }}; border: 2px solid #f472b6; padding: 8px 10px; cursor: inherit;">LAYOUT B</button>
+        </div>
+
+        <!-- HERO VARIANT A: arcade title -->
+        <sc-if value="{{ heroIsA }}" hint-placeholder-val="{{ true }}">
+          <div style="text-align: center;">
+            <div style="display: inline-block; margin: 0 auto 26px; animation: floaty 5s ease-in-out infinite;">
+              <div style="position: relative; display: inline-block; padding: 6px; background: #0e0a18; border: 3px solid #22d3ee; box-shadow: 0 0 0 3px #0b0813, 0 0 28px rgba(34,211,238,.5);">
+                <img src="assets/avatar.png" alt="Avatar pixelado de Pedro" style="display: block; width: clamp(120px, 22vw, 170px); height: clamp(120px, 22vw, 170px); object-fit: cover; image-rendering: pixelated;">
+                <span style="position: absolute; bottom: -11px; left: 50%; transform: translateX(-50%); font-family: 'Press Start 2P', monospace; font-size: 8px; color: #0b0813; background: #fbbf24; border: 2px solid #fde68a; padding: 4px 7px; white-space: nowrap;">LV. 24</span>
+              </div>
+            </div>
+            <p style="font-family: 'Press Start 2P', monospace; font-size: 11px; color: #22d3ee; letter-spacing: 2px; margin: 0 0 16px;">INSIRA UMA FICHA &nbsp;•&nbsp; 1 PLAYER</p>
+            <h1 style="font-family: 'Press Start 2P', monospace; font-size: clamp(30px, 8vw, 76px); line-height: 1.12; margin: 0; color: #f5f3ff; text-shadow: 4px 4px 0 #6d28d9, 8px 8px 0 rgba(34,211,238,.35);">PEDRO</h1>
+            <p style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: clamp(15px, 2.5vw, 22px); color: #c4bce0; margin: 22px 0 0; max-width: 560px; margin-left: auto; margin-right: auto; text-wrap: balance;">Desenvolvedor Fullstack construindo produtos web do banco de dados à interface — com código limpo e um toque de IA.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 38px;">
+              <button onClick="{{ onEnter }}" style="font-family: 'Press Start 2P', monospace; font-size: 13px; color: #0b0813; background: #22d3ee; border: 3px solid #a5f3fc; padding: 18px 26px; cursor: inherit; box-shadow: 0 6px 0 #0e7490, 0 0 24px rgba(34,211,238,.5); transition: transform .08s, box-shadow .08s;" style-hover="box-shadow: 0 6px 0 #0e7490, 0 0 34px rgba(34,211,238,.8);" style-active="transform: translateY(6px); box-shadow: 0 0 24px rgba(34,211,238,.5);">&#9654; ENTER PORTFOLIO</button>
+              <a href="#projects" style="font-family: 'Press Start 2P', monospace; font-size: 13px; color: #f5f3ff; background: transparent; border: 3px solid #6d28d9; padding: 18px 26px; cursor: inherit; text-decoration: none; box-shadow: 0 6px 0 #3b1075; transition: transform .08s, box-shadow .08s;" style-hover="border-color: #a78bfa;" style-active="transform: translateY(6px); box-shadow: none;">VER QUESTS</a>
+            </div>
+            <p style="font-family: 'Press Start 2P', monospace; font-size: 10px; color: #8b84a8; margin-top: 34px; animation: blink 1.1s step-end infinite;">PRESS START</p>
+          </div>
+        </sc-if>
+
+        <!-- HERO VARIANT B: character select split -->
+        <sc-if value="{{ heroIsB }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 40px;">
+            <div style="flex: 1 1 320px; min-width: 280px;">
+              <p style="font-family: 'Press Start 2P', monospace; font-size: 10px; color: #f472b6; letter-spacing: 2px; margin: 0 0 16px;">SELECIONE SEU PLAYER</p>
+              <h1 style="font-family: 'Press Start 2P', monospace; font-size: clamp(26px, 6vw, 56px); line-height: 1.15; margin: 0; color: #f5f3ff; text-shadow: 4px 4px 0 #6d28d9;">PEDRO<br><span style="color: #22d3ee; font-size: .6em;">FULLSTACK DEV</span></h1>
+              <p style="font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: clamp(15px, 2.4vw, 20px); color: #c4bce0; margin: 24px 0 0; max-width: 460px;">Pronto para a próxima missão. Especialista em construir aplicações web completas, rápidas e bem desenhadas.</p>
+              <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px;">
+                <button onClick="{{ onEnter }}" style="font-family: 'Press Start 2P', monospace; font-size: 12px; color: #0b0813; background: #f472b6; border: 3px solid #fbcfe8; padding: 16px 22px; cursor: inherit; box-shadow: 0 6px 0 #9d174d, 0 0 24px rgba(244,114,182,.45); transition: transform .08s, box-shadow .08s;" style-active="transform: translateY(6px); box-shadow: 0 0 24px rgba(244,114,182,.45);">&#9654; START GAME</button>
+                <a href="#contact" style="font-family: 'Press Start 2P', monospace; font-size: 12px; color: #f5f3ff; background: transparent; border: 3px solid #6d28d9; padding: 16px 22px; cursor: inherit; text-decoration: none; box-shadow: 0 6px 0 #3b1075; transition: transform .08s, box-shadow .08s;" style-active="transform: translateY(6px); box-shadow: none;">CONTATO</a>
+              </div>
+            </div>
+            <!-- character card -->
+            <div style="flex: 0 1 320px; min-width: 260px; background: linear-gradient(180deg, #1b1430, #14101f); border: 3px solid #3a3360; box-shadow: 0 0 0 3px #0b0813, 0 0 30px rgba(167,139,250,.25); padding: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <span style="font-family: 'Press Start 2P', monospace; font-size: 9px; color: #22d3ee;">PLAYER 01</span>
+                <span style="font-family: 'Press Start 2P', monospace; font-size: 9px; color: #fbbf24;">LV.24</span>
+              </div>
+              <div style="display: flex; justify-content: center; padding: 14px; background: #0e0a18; border: 2px dashed #3a3360;">
+                <img src="assets/avatar.png" alt="Avatar pixelado de Pedro" style="display: block; width: 100%; max-width: 200px; aspect-ratio: 1; object-fit: cover; image-rendering: pixelated; border: 2px solid #22d3ee; box-shadow: 0 0 18px rgba(34,211,238,.4);">
+              </div>
+              <p style="font-family: 'Press Start 2P', monospace; font-size: 11px; color: #f5f3ff; text-align: center; margin: 16px 0 4px;">PEDRO</p>
+              <p style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: #8b84a8; text-align: center; margin: 0;">Desenvolvedor Fullstack</p>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <button onClick="{{ onScrollDown }}" aria-label="Descer" style="position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 10; background: none; border: none; cursor: inherit; font-family: 'Press Start 2P', monospace; font-size: 16px; color: #22d3ee; animation: floaty2 1.8s ease-in-out infinite;">&#9660;</button>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section id="about" data-screen-label="Sobre" style="max-width: 1180px; margin: 0 auto; padding: 96px 22px 50px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 32px; flex-wrap: wrap;">
+        <span style="font-family: 'Press Start 2P', monospace; font-size: 11px; color: #22d3ee; background: #0e1a22; border: 2px solid #22d3ee; padding: 9px 11px; box-shadow: 3px 3px 0 #06222b;">01</span>
+        <h2 style="font-family: 'Press Start 2P', monospace; font-size: clamp(15px, 3.2vw, 26px); margin: 0; color: #f5f3ff; letter-spacing: 1px;">CHARACTER PROFILE</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px;">
+        <!-- stats panel -->
+        <div style="background: linear-gradient(180deg, #1b1430, #14101f); border: 3px solid #3a3360; box-shadow: 0 0 0 3px #0b0813, 0 0 26px rgba(167,139,250,.18); padding: 24px;">
+          <div style="display: flex; align-items: center; gap: 18px; margin-bottom: 22px; padding-bottom: 20px; border-bottom: 2px solid #2a2342;">
+            <div style="flex: 0 0 auto; padding: 6px; background: #0e0a18; border: 2px solid #3a3360; box-shadow: 0 0 0 2px #0b0813;">
+              <img src="assets/avatar.png" alt="Avatar pixelado de Pedro" style="display: block; width: 84px; height: 84px; object-fit: cover; image-rendering: pixelated;">
+            </div>
+            <div>
+              <p style="font-family: 'Press Start 2P', monospace; font-size: 14px; color: #f5f3ff; margin: 0 0 8px;">PEDRO</p>
+              <span style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #fbbf24; background: #2a1f08; border: 2px solid #fbbf24; padding: 5px 7px;">LV. 24</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <sc-for list="{{ stats }}" as="st" hint-placeholder-count="6">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
+                <span style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #8b84a8; letter-spacing: .5px;">{{ st.l }}</span>
+                <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px; color: #e7e3f5; text-align: right;">{{ st.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- bio + attributes -->
+        <div style="display: flex; flex-direction: column; gap: 22px;">
+          <div style="background: linear-gradient(180deg, #1b1430, #14101f); border: 3px solid #3a3360; box-shadow: 0 0 0 3px #0b0813; padding: 24px;">
+            <p style="font-family: 'Press Start 2P', monospace; font-size: 9px; color: #22d3ee; margin: 0 0 16px;">&#9656; BIO</p>
+            <p style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; line-height: 1.7; color: #c4bce0; margin: 0; text-wrap: pretty;">{{ bio }}</p>
+          </div>
+          <div style="background: linear-gradient(180deg, #1b1430, #14101f); border: 3px solid #3a3360; box-shadow: 0 0 0 3px #0b0813; padding: 24px;">
+            <p style="font-family: 'Press Start 2P', monospace; font-size: 9px; color: #f472b6; margin: 0 0 18px;">&#9656; ATRIBUTOS</p>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <sc-for list="{{ attrs }}" as="at" hint-placeholder-count="4">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #c4bce0;">{{ at.l }}</span>
+                    <span style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: {{ at.c }};">{{ at.v }}</span>
+                  </div>
+                  <div style="height: 14px; background: #0e0a18; border: 2px solid #2a2342; padding: 2px;">
+                    <div style="height: 100%; width: {{ at.pct }}; background: {{ at.c }}; box-shadow: 0 0 8px {{ at.c }};"></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- achievements -->
+      <div style="margin-top: 22px; background: linear-gradient(180deg, #1b1430, #14101f); border: 3px solid #3a3360; box-shadow: 0 0 0 3px #0b0813; padding: 24px;">
+        <p style="font-family: 'Press Start 2P', monospace; font-size: 9px; color: #fbbf24; margin: 0 0 18px;">&#9656; CONQUISTAS</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px;">
+          <sc-for list="{{ achievements }}" as="ac" hint-placeholder-count="6">
+            <div title="{{ ac.desc }}" style="display: flex; align-items: center; gap: 11px; background: #0e0a18; border: 2px solid #2a2342; padding: 11px;">
+              <span style="flex: 0 0 auto; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 17px; background: #14101f; border: 2px solid #3a3360; color: #fbbf24;">{{ ac.ic }}</span>
+              <div style="min-width: 0;">
+                <p style="font-family: 'Press Start 2P', monospace; font-size: 7px; color: #e7e3f5; margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ ac.name }}</p>
+                <p style="font-family: 'Space Grotesk', sans-serif; font-size: 11px; color: #6b6488; margin: 0;">{{ ac.desc }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SKILLS ===================== -->
+    <section id="skills" data-screen-label="Skills" style="max-width: 1180px; margin: 0 auto; padding: 80px 22px 50px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 26px; flex-wrap: wrap;">
+        <span style="font-family: 'Press Start 2P', monospace; font-size: 11px; color: #a78bfa; background: #170f28; border: 2px solid #a78bfa; padding: 9px 11px; box-shadow: 3px 3px 0 #2b1758;">02</span>
+        <h2 style="font-family: 'Press Start 2P', monospace; font-size: clamp(15px, 3.2vw, 26px); margin: 0; color: #f5f3ff; letter-spacing: 1px;">SKILLS</h2>
+        <div style="margin-left: auto; display: flex; border: 2px solid #2a2342; background: #100c1c; padding: 3px;">
+          <button onClick="{{ setInv }}" style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: {{ invColor }}; background: {{ invBg }}; border: none; padding: 8px 9px; cursor: inherit;">INVENTÁRIO</button>
+          <button onClick="{{ setTree }}" style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: {{ treeColor }}; background: {{ treeBg }}; border: none; padding: 8px 9px; cursor: inherit;">ÁRVORE</button>
+        </div>
+      </div>
+
+      <!-- inventory grid -->
+      <sc-if value="{{ viewInv }}" hint-placeholder-val="{{ true }}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px;">
+          <sc-for list="{{ skills }}" as="sk" hint-placeholder-count="10">
+            <div style="position: relative; background: linear-gradient(180deg, #1b1430, #131019); border: 2px solid #3a3360; box-shadow: 0 0 0 2px #0b0813; padding: 16px; transition: transform .12s, box-shadow .12s;" style-hover="transform: translateY(-4px); box-shadow: 0 0 0 2px #0b0813, 0 0 22px rgba(167,139,250,.3);">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+                <span style="flex: 0 0 auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-family: 'Press Start 2P', monospace; font-size: 11px; color: {{ sk.rarColor }}; background: #0e0a18; border: 2px solid {{ sk.rarColor }};">{{ sk.short }}</span>
+                <div>
+                  <p style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: #f5f3ff; margin: 0 0 4px;">{{ sk.name }}</p>
+                  <p style="font-family: 'Press Start 2P', monospace; font-size: 6px; color: {{ sk.rarColor }}; margin: 0; letter-spacing: 1px;">{{ sk.rarLabel }}</p>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="font-family: 'Press Start 2P', monospace; font-size: 7px; color: #8b84a8;">XP</span>
+                <span style="font-family: 'Press Start 2P', monospace; font-size: 7px; color: {{ sk.rarColor }};">{{ sk.pct }}</span>
+              </div>
+              <div style="height: 12px; background: #0e0a18; border: 2px solid #2a2342; padding: 2px;">
+                <div style="height: 100%; width: {{ sk.pct }}; background: {{ sk.rarColor }}; box-shadow: 0 0 8px {{ sk.rarColor }};"></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- skill tree -->
+      <sc-if value="{{ viewTree }}" hint-placeholder-val="{{ false }}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
+          <sc-for list="{{ branches }}" as="br" hint-placeholder-count="3">
+            <div style="background: linear-gradient(180deg, #1b1430, #131019); border: 2px solid #3a3360; box-shadow: 0 0 0 2px #0b0813; padding: 22px;">
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <div style="font-family: 'Press Start 2P', monospace; font-size: 10px; color: {{ br.color }}; border: 2px solid {{ br.color }}; padding: 10px 14px; background: #0e0a18; box-shadow: 0 0 18px {{ br.color }};">{{ br.name }}</div>
+                <sc-for list="{{ br.nodes }}" as="nd" hint-placeholder-count="4">
+                  <div style="width: 3px; height: 22px; background: {{ br.color }}; opacity: .5;"></div>
+                  <div style="width: 100%; display: flex; align-items: center; gap: 12px; background: #0e0a18; border: 2px solid #2a2342; padding: 11px 13px;">
+                    <span style="flex: 0 0 auto; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-family: 'Press Start 2P', monospace; font-size: 9px; color: {{ br.color }}; border: 2px solid {{ br.color }};">{{ nd.short }}</span>
+                    <div style="flex: 1; min-width: 0;">
+                      <p style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; color: #f5f3ff; margin: 0 0 5px;">{{ nd.name }}</p>
+                      <div style="height: 9px; background: #14101f; border: 1px solid #2a2342;">
+                        <div style="height: 100%; width: {{ nd.pct }}; background: {{ br.color }};"></div>
+                      </div>
+                    </div>
+                    <span style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: {{ br.color }};">{{ nd.level }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </section>
+
+    <!-- ===================== PROJECTS ===================== -->
+    <section id="projects" data-screen-label="Quests" style="max-width: 1180px; margin: 0 auto; padding: 80px 22px 50px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px; flex-wrap: wrap;">
+        <span style="font-family: 'Press Start 2P', monospace; font-size: 11px; color: #34d399; background: #0c1f17; border: 2px solid #34d399; padding: 9px 11px; box-shadow: 3px 3px 0 #06291c;">03</span>
+        <h2 style="font-family: 'Press Start 2P', monospace; font-size: clamp(15px, 3.2vw, 26px); margin: 0; color: #f5f3ff; letter-spacing: 1px;">QUEST LOG</h2>
+      </div>
+      <p style="font-family: 'Space Grotesk', sans-serif; font-size: 15px; color: #8b84a8; margin: 0 0 28px;">Missões concluídas, em andamento e protótipos. Cada quest concede XP.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 18px;">
+        <sc-for list="{{ projects }}" as="pj" hint-placeholder-count="4">
+          <div style="display: flex; flex-direction: column; background: linear-gradient(180deg, #1b1430, #131019); border: 3px solid #3a3360; box-shadow: 0 0 0 3px #0b0813; padding: 22px; transition: transform .12s, box-shadow .12s;" style-hover="transform: translateY(-5px); box-shadow: 0 0 0 3px #0b0813, 0 0 28px rgba(34,211,238,.22);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 14px;">
+              <h3 style="font-family: 'Press Start 2P', monospace; font-size: 13px; color: #f5f3ff; margin: 0; line-height: 1.4;">{{ pj.name }}</h3>
+              <span style="flex: 0 0 auto; font-family: 'Press Start 2P', monospace; font-size: 7px; color: {{ pj.sc }}; border: 2px solid {{ pj.sc }}; padding: 6px 7px; white-space: nowrap;">{{ pj.status }}</span>
+            </div>
+            <p style="font-family: 'Space Grotesk', sans-serif; font-size: 14px; line-height: 1.6; color: #c4bce0; margin: 0 0 16px; flex: 1;">{{ pj.desc }}</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px;">
+              <sc-for list="{{ pj.tech }}" as="t" hint-placeholder-count="3">
+                <span style="font-family: 'Press Start 2P', monospace; font-size: 7px; color: #a78bfa; background: #170f28; border: 1px solid #3a3360; padding: 6px 8px;">{{ t }}</span>
+              </sc-for>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <span style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #fbbf24;">&#9733; +{{ pj.xp }} XP</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <a href="#" style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #0b0813; background: #22d3ee; border: 2px solid #a5f3fc; padding: 10px 11px; text-decoration: none; cursor: inherit; box-shadow: 0 3px 0 #0e7490; transition: transform .08s, box-shadow .08s;" style-active="transform: translateY(3px); box-shadow: none;">VER</a>
+              <a href="#" style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #e7e3f5; background: transparent; border: 2px solid #6d28d9; padding: 10px 11px; text-decoration: none; cursor: inherit;" style-hover="border-color: #a78bfa; color: #a78bfa;">GITHUB</a>
+              <a href="#" style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #e7e3f5; background: transparent; border: 2px solid #6d28d9; padding: 10px 11px; text-decoration: none; cursor: inherit;" style-hover="border-color: #a78bfa; color: #a78bfa;">DETALHES</a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- ===================== EXPERIENCE ===================== -->
+    <section id="experience" data-screen-label="Jornada" style="max-width: 1180px; margin: 0 auto; padding: 80px 22px 50px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 28px; flex-wrap: wrap;">
+        <span style="font-family: 'Press Start 2P', monospace; font-size: 11px; color: #f472b6; background: #200a17; border: 2px solid #f472b6; padding: 9px 11px; box-shadow: 3px 3px 0 #3a0a23;">04</span>
+        <h2 style="font-family: 'Press Start 2P', monospace; font-size: clamp(15px, 3.2vw, 26px); margin: 0; color: #f5f3ff; letter-spacing: 1px;">JOURNEY MAP</h2>
+      </div>
+
+      <div style="position: relative; padding-left: 30px;">
+        <div style="position: absolute; left: 9px; top: 6px; bottom: 6px; width: 4px; background: repeating-linear-gradient(180deg, #6d28d9 0 8px, transparent 8px 14px);"></div>
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <sc-for list="{{ experiences }}" as="ex" hint-placeholder-count="5">
+            <div style="position: relative;">
+              <span style="position: absolute; left: -30px; top: 14px; width: 16px; height: 16px; background: {{ ex.dotBg }}; border: 3px solid #0b0813; box-shadow: 0 0 0 2px {{ ex.ringColor }}, 0 0 12px {{ ex.ringColor }};"></span>
+              <div style="background: linear-gradient(180deg, #1b1430, #131019); border: 2px solid #3a3360; box-shadow: 0 0 0 2px #0b0813; padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+                  <span style="font-family: 'Press Start 2P', monospace; font-size: 9px; color: #a78bfa;">{{ ex.ph }} &nbsp;•&nbsp; {{ ex.year }}</span>
+                  <span style="font-family: 'Press Start 2P', monospace; font-size: 7px; color: {{ ex.statusColor }}; border: 2px solid {{ ex.statusColor }}; padding: 5px 7px;">{{ ex.statusLabel }}</span>
+                </div>
+                <h3 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; color: #f5f3ff; margin: 0 0 4px;">{{ ex.title }}</h3>
+                <p style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: #22d3ee; margin: 0 0 10px;">{{ ex.org }}</p>
+                <p style="font-family: 'Space Grotesk', sans-serif; font-size: 14px; line-height: 1.6; color: #c4bce0; margin: 0;">{{ ex.desc }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT ===================== -->
+    <section id="contact" data-screen-label="Contato" style="max-width: 1180px; margin: 0 auto; padding: 80px 22px 60px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 28px; flex-wrap: wrap;">
+        <span style="font-family: 'Press Start 2P', monospace; font-size: 11px; color: #22d3ee; background: #0e1a22; border: 2px solid #22d3ee; padding: 9px 11px; box-shadow: 3px 3px 0 #06222b;">05</span>
+        <h2 style="font-family: 'Press Start 2P', monospace; font-size: clamp(15px, 3.2vw, 26px); margin: 0; color: #f5f3ff; letter-spacing: 1px;">FINAL STAGE</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; align-items: start;">
+        <!-- terminal form -->
+        <div style="background: #07100e; border: 3px solid #1f5e4a; box-shadow: 0 0 0 3px #0b0813, 0 0 30px rgba(52,211,153,.18); overflow: hidden;">
+          <div style="display: flex; align-items: center; gap: 8px; background: #0c1f17; border-bottom: 2px solid #1f5e4a; padding: 10px 14px;">
+            <span style="width: 10px; height: 10px; background: #fb7185;"></span>
+            <span style="width: 10px; height: 10px; background: #fbbf24;"></span>
+            <span style="width: 10px; height: 10px; background: #34d399;"></span>
+            <span style="font-family: 'VT323', monospace; font-size: 17px; color: #34d399; margin-left: 8px;">contact_terminal.exe</span>
+          </div>
+          <div style="padding: 22px;">
+            <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+              <div style="text-align: center; padding: 30px 10px;">
+                <p style="font-family: 'Press Start 2P', monospace; font-size: 13px; color: #34d399; margin: 0 0 14px; text-shadow: 0 0 12px rgba(52,211,153,.5);">&#10003; MENSAGEM ENVIADA</p>
+                <p style="font-family: 'VT323', monospace; font-size: 20px; color: #7dd3b0; margin: 0 0 22px;">&gt; transmissão concluída. retorno em breve, player.</p>
+                <button onClick="{{ resetForm }}" style="font-family: 'Press Start 2P', monospace; font-size: 9px; color: #07100e; background: #34d399; border: 2px solid #a7f3d0; padding: 12px 16px; cursor: inherit; box-shadow: 0 4px 0 #1f5e4a;" style-active="transform: translateY(4px); box-shadow: none;">NOVA MENSAGEM</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+            <form onSubmit="{{ onSubmit }}">
+              <label style="display: block; font-family: 'VT323', monospace; font-size: 19px; color: #34d399; margin-bottom: 6px;">&gt; nome:</label>
+              <input value="{{ fName }}" onChange="{{ onName }}" placeholder="seu_nome" style="width: 100%; font-family: 'VT323', monospace; font-size: 19px; color: #d1fae5; background: #0c1f17; border: 2px solid #1f5e4a; padding: 10px 12px; margin-bottom: 16px; outline: none;" style-focus="border-color: #34d399; box-shadow: 0 0 10px rgba(52,211,153,.3);">
+              <label style="display: block; font-family: 'VT323', monospace; font-size: 19px; color: #34d399; margin-bottom: 6px;">&gt; email:</label>
+              <input value="{{ fEmail }}" onChange="{{ onEmail }}" placeholder="seu@email.com" style="width: 100%; font-family: 'VT323', monospace; font-size: 19px; color: #d1fae5; background: #0c1f17; border: 2px solid #1f5e4a; padding: 10px 12px; margin-bottom: 16px; outline: none;" style-focus="border-color: #34d399; box-shadow: 0 0 10px rgba(52,211,153,.3);">
+              <label style="display: block; font-family: 'VT323', monospace; font-size: 19px; color: #34d399; margin-bottom: 6px;">&gt; mensagem:</label>
+              <textarea value="{{ fMsg }}" onChange="{{ onMsg }}" placeholder="digite sua mensagem..." rows="4" style="width: 100%; font-family: 'VT323', monospace; font-size: 19px; color: #d1fae5; background: #0c1f17; border: 2px solid #1f5e4a; padding: 10px 12px; margin-bottom: 18px; outline: none; resize: vertical;" style-focus="border-color: #34d399; box-shadow: 0 0 10px rgba(52,211,153,.3);"></textarea>
+              <button type="submit" style="width: 100%; font-family: 'Press Start 2P', monospace; font-size: 11px; color: #07100e; background: #34d399; border: 3px solid #a7f3d0; padding: 15px; cursor: inherit; box-shadow: 0 5px 0 #1f5e4a, 0 0 20px rgba(52,211,153,.35); transition: transform .08s, box-shadow .08s;" style-active="transform: translateY(5px); box-shadow: 0 0 20px rgba(52,211,153,.35);">&#9654; ENVIAR MENSAGEM</button>
+            </form>
+            </sc-if>
+          </div>
+        </div>
+
+        <!-- socials -->
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="background: linear-gradient(180deg, #1b1430, #131019); border: 3px solid #3a3360; box-shadow: 0 0 0 3px #0b0813; padding: 24px;">
+            <p style="font-family: 'Press Start 2P', monospace; font-size: 10px; color: #a78bfa; margin: 0 0 8px;">&#9656; LINKS DE PARTY</p>
+            <p style="font-family: 'Space Grotesk', sans-serif; font-size: 14px; color: #8b84a8; margin: 0 0 18px;">Bora formar uma party? Me chama em qualquer canal.</p>
+            <div style="display: flex; flex-direction: column; gap: 11px;">
+              <sc-for list="{{ socials }}" as="so" hint-placeholder-count="3">
+                <a href="{{ so.href }}" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #0e0a18; border: 2px solid #3a3360; padding: 15px 16px; text-decoration: none; cursor: inherit; transition: transform .12s, border-color .12s;" style-hover="transform: translateX(5px); border-color: {{ so.c }};">
+                  <span style="font-family: 'Press Start 2P', monospace; font-size: 10px; color: {{ so.c }};">{{ so.l }}</span>
+                  <span style="font-family: 'Space Grotesk', sans-serif; font-size: 14px; color: #c4bce0;">{{ so.h }}</span>
+                </a>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background: linear-gradient(180deg, #1b1430, #131019); border: 3px solid #3a3360; box-shadow: 0 0 0 3px #0b0813; padding: 22px; text-align: center;">
+            <p style="font-family: 'Press Start 2P', monospace; font-size: 11px; color: #fbbf24; margin: 0 0 10px; text-shadow: 0 0 12px rgba(251,191,36,.4);">&#9733; THANKS FOR PLAYING</p>
+            <p style="font-family: 'VT323', monospace; font-size: 20px; color: #8b84a8; margin: 0;">&gt; você chegou ao fim da fase.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- footer -->
+    <footer style="border-top: 2px solid #2a2342; padding: 26px 22px; text-align: center;">
+      <p style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #6b6488; margin: 0; line-height: 1.8;">PEDRO.dev &nbsp;•&nbsp; GAME OVER? INSIRA OUTRA FICHA &nbsp;•&nbsp; {{ year }}</p>
+    </footer>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1280, &quot;height&quot;: 860}}">
+class Component extends DCLogic {
+  state = {
+    theme: 'retro',
+    heroVariant: 0,
+    skillsView: 'inventory',
+    activeSection: 'home',
+    progress: 0,
+    navOpen: false,
+    isMobile: false,
+    fName: '', fEmail: '', fMsg: '', sent: false,
+  };
+
+  componentDidMount() {
+    this._onScroll = () => {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      const prog = max > 0 ? Math.min(100, Math.max(0, (h.scrollTop / max) * 100)) : 0;
+      const ids = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
+      let active = 'home';
+      for (const id of ids) { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top <= 160) active = id; }
+      if (Math.abs(prog - this.state.progress) > 0.3 || active !== this.state.activeSection) this.setState({ progress: prog, activeSection: active });
+    };
+    this._onResize = () => { const m = window.innerWidth < 880; if (m !== this.state.isMobile) this.setState({ isMobile: m, navOpen: false }); };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    window.addEventListener('resize', this._onResize);
+    this._onResize(); this._onScroll();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this._onScroll);
+    window.removeEventListener('resize', this._onResize);
+  }
+
+  go(id) {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: id === 'home' ? 0 : el.offsetTop - 60, behavior: 'smooth' });
+    this.setState({ navOpen: false });
+  }
+
+  buildAvatar(unit) {
+    const PAL = { '.': null, '1': '#120e1c', 'H': '#7c3aed', 'h': '#a78bfa', 'S': '#e7b08a', 'V': '#22d3ee', 'W': '#a5f3fc', 'B': '#2a2142', 'A': '#6d28d9' };
+    const ROWS = ['...111111...', '..1HHHHHH1..', '.1HHhhhhHH1.', '1HHhhhhhhHH1', '1HhhSSSShhH1', '1HhSSSSSShH1', '1HSVVVVVVSH1', '1HSVWVVWVSH1', '11SSVVVVSS11', '.1SSSSSSSS1.', '..11SSSS11..', '.1BBABBABB1.', '1BBBAAAABBB1', '1BBBBAABBBB1'];
+    const parts = [];
+    ROWS.forEach((row, y) => { for (let x = 0; x < row.length; x++) { const c = PAL[row[x]]; if (c) parts.push(`${x * unit}px ${y * unit}px 0 0 ${c}`); } });
+    return { shadow: parts.join(','), w: 12 * unit, h: 14 * unit };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const isRetro = s.theme === 'retro';
+    const csvg = '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 11 11" shape-rendering="crispEdges"><rect x="5" y="0" width="1" height="3" fill="#22d3ee"/><rect x="5" y="8" width="1" height="3" fill="#22d3ee"/><rect x="0" y="5" width="3" height="1" fill="#22d3ee"/><rect x="8" y="5" width="3" height="1" fill="#22d3ee"/><rect x="5" y="5" width="1" height="1" fill="#a78bfa"/></svg>';
+    const cursorStyle = isRetro ? `url("data:image/svg+xml,${encodeURIComponent(csvg)}") 11 11, crosshair` : 'auto';
+    const baseBg = isRetro
+      ? 'radial-gradient(120% 90% at 50% 0%, #1c1033 0%, #0b0813 62%)'
+      : 'linear-gradient(180deg, #16131f 0%, #0d0b15 100%)';
+
+    const rar = lvl => lvl >= 90 ? { l: 'LENDÁRIO', c: '#fbbf24' } : lvl >= 84 ? { l: 'ÉPICO', c: '#c084fc' } : lvl >= 76 ? { l: 'RARO', c: '#22d3ee' } : { l: 'COMUM', c: '#9a93b8' };
+
+    const av = this.buildAvatar(s.isMobile ? 8 : 10);
+    const avSmall = this.buildAvatar(3);
+
+    const navRaw = [
+      { id: 'home', label: 'INÍCIO' }, { id: 'about', label: 'SOBRE' }, { id: 'skills', label: 'SKILLS' },
+      { id: 'projects', label: 'QUESTS' }, { id: 'experience', label: 'JORNADA' }, { id: 'contact', label: 'CONTATO' },
+    ];
+    const navItems = navRaw.map(n => {
+      const active = n.id === s.activeSection;
+      return { ...n, active, onClick: () => this.go(n.id), navColor: active ? '#22d3ee' : '#8b84a8', navBorder: active ? '#22d3ee' : 'transparent', mark: active ? '\u25B8 ' : '', mapLabel: active ? n.label : '', mapDot: active ? '#22d3ee' : 'transparent', mapBorder: active ? '#22d3ee' : '#4a4470' };
+    });
+
+    const skillsRaw = [
+      { name: 'React', short: 'Re', level: 90 }, { name: 'Next.js', short: 'Nx', level: 88 },
+      { name: 'TypeScript', short: 'TS', level: 86 }, { name: 'JavaScript', short: 'JS', level: 92 },
+      { name: 'Node.js', short: 'No', level: 83 }, { name: 'PostgreSQL', short: 'PG', level: 78 },
+      { name: 'Tailwind', short: 'Tw', level: 85 }, { name: 'REST APIs', short: '{ }', level: 84 },
+      { name: 'Git', short: 'Git', level: 80 }, { name: 'IA aplicada', short: 'AI', level: 70 },
+    ];
+    const skills = skillsRaw.map(k => { const r = rar(k.level); return { ...k, pct: k.level + '%', rarLabel: r.l, rarColor: r.c }; });
+    const byName = {}; skills.forEach(k => byName[k.name] = k);
+    const branches = [
+      { name: 'FRONTEND', color: '#22d3ee', nodes: [byName['React'], byName['Next.js'], byName['TypeScript'], byName['Tailwind']] },
+      { name: 'BACKEND', color: '#a78bfa', nodes: [byName['Node.js'], byName['PostgreSQL'], byName['REST APIs']] },
+      { name: 'TOOLS / IA', color: '#f472b6', nodes: [byName['JavaScript'], byName['Git'], byName['IA aplicada']] },
+    ];
+
+    const stats = [
+      { l: 'NOME', v: 'Pedro' }, { l: 'CLASSE', v: 'Desenvolvedor Fullstack' },
+      { l: 'ESPECIALIDADE', v: 'Web Apps & APIs' }, { l: 'NÍVEL', v: 'LV. 24' },
+      { l: 'LOCAL', v: 'Colinas de Pituaçu, BA' }, { l: 'ESTILO', v: 'Remoto / Híbrido' },
+    ];
+    const attrs = [
+      { l: 'LÓGICA', v: 88, pct: '88%', c: '#22d3ee' }, { l: 'CRIATIVIDADE', v: 82, pct: '82%', c: '#a78bfa' },
+      { l: 'FOCO', v: 90, pct: '90%', c: '#34d399' }, { l: 'CAFEÍNA', v: 99, pct: '99%', c: '#f472b6' },
+    ];
+    const achievements = [
+      { ic: '\u2605', name: 'First Commit', desc: 'Primeiro commit em produção', on: true },
+      { ic: '\u2694', name: 'Bug Slayer', desc: '100+ bugs eliminados', on: true },
+      { ic: '\u263E', name: 'Night Owl', desc: 'Deploy depois da meia-noite', on: true },
+      { ic: '\u21EA', name: 'Deploy Master', desc: '50+ deploys sem rollback', on: true },
+      { ic: '\u232C', name: 'Open Source', desc: 'Contribuições públicas', on: true },
+      { ic: '?', name: '???', desc: 'Conquista secreta bloqueada', on: false },
+    ];
+
+    const projects = [
+      { name: 'NEON COMMERCE', desc: 'Plataforma de e-commerce com checkout em tempo real, carrinho persistente e painel administrativo completo.', tech: ['Next.js', 'TypeScript', 'Stripe', 'PostgreSQL'], status: 'COMPLETO', sc: '#34d399', xp: 1200 },
+      { name: 'API GUILD', desc: 'Conjunto de microsserviços com autenticação, rate-limiting e documentação automática gerada por código.', tech: ['Node.js', 'Express', 'PostgreSQL', 'Docker'], status: 'EM PROGRESSO', sc: '#fbbf24', xp: 800 },
+      { name: 'PIXEL DASH', desc: 'Dashboard de analytics em tempo real com gráficos interativos e exportação de relatórios.', tech: ['React', 'TypeScript', 'WebSocket', 'Tailwind'], status: 'COMPLETO', sc: '#34d399', xp: 1000 },
+      { name: 'AI QUEST LOG', desc: 'Assistente de IA que organiza tarefas de devs e sugere os próximos passos no código.', tech: ['Next.js', 'OpenAI', 'Prisma'], status: 'PROTÓTIPO', sc: '#22d3ee', xp: 500 },
+    ];
+
+    const expRaw = [
+      { ph: 'FASE 01', title: 'Estágio Frontend', org: 'Startup local', year: '2021', desc: 'Primeiros componentes em React e correção de bugs em produção.', xp: 300, done: true, current: false },
+      { ph: 'FASE 02', title: 'Dev Júnior Fullstack', org: 'Software house', year: '2022', desc: 'APIs em Node.js e telas em React. Primeiro deploy sozinho.', xp: 600, done: true, current: false },
+      { ph: 'FASE 03', title: 'Dev Pleno', org: 'Produto SaaS', year: '2023', desc: 'Liderança técnica em features e mentoria de estagiários.', xp: 1200, done: true, current: false },
+      { ph: 'FASE 04', title: 'Freelancer & Projetos próprios', org: 'Autônomo', year: '2024', desc: 'Entrega de produtos completos para clientes e estudos em IA.', xp: 900, done: true, current: false },
+      { ph: 'FASE 05', title: '??? Próxima missão', org: 'Em busca', year: '2025+', desc: 'Procurando o próximo desafio fullstack para upar de nível.', xp: 0, done: false, current: true },
+    ];
+    const experiences = expRaw.map(e => {
+      const accent = e.current ? '#fbbf24' : '#34d399';
+      return { ...e, dotBg: e.current ? '#fbbf24' : e.done ? '#34d399' : '#3a3360', ringColor: accent, statusColor: accent, statusLabel: e.current ? 'EM PROGRESSO' : 'CONCLUÍDA' };
+    });
+
+    const socials = [
+      { l: 'GITHUB', h: '@pedro', c: '#a78bfa', href: '#' },
+      { l: 'LINKEDIN', h: '/in/pedro', c: '#22d3ee', href: '#' },
+      { l: 'E-MAIL', h: 'pedro@email.com', c: '#f472b6', href: '#' },
+    ];
+
+    return {
+      isRetro, cursorStyle, baseBg,
+      themeLabelA: 'RETRO', themeLabelB: 'MODERN',
+      retroTabColor: isRetro ? '#0b0813' : '#8b84a8', retroTabBg: isRetro ? '#22d3ee' : 'transparent',
+      modernTabColor: !isRetro ? '#0b0813' : '#8b84a8', modernTabBg: !isRetro ? '#a78bfa' : 'transparent',
+      toggleTheme: () => this.setState({ theme: isRetro ? 'modern' : 'retro' }),
+      setRetro: () => this.setState({ theme: 'retro' }),
+      setModern: () => this.setState({ theme: 'modern' }),
+      progress: Math.round(s.progress), progressW: s.progress + '%',
+      coinCount: Math.round(s.progress / 10),
+      isMobile: s.isMobile, isDesktop: !s.isMobile,
+      navOpen: s.navOpen, toggleNav: () => this.setState(p => ({ navOpen: !p.navOpen })),
+      navItems,
+      onHome: () => this.go('home'),
+      onEnter: () => this.go('about'),
+      onScrollDown: () => this.go('about'),
+      avShadow: av.shadow, avW: av.w, avH: av.h, avUnit: s.isMobile ? 8 : 10,
+      avSmallShadow: avSmall.shadow, avSmallW: avSmall.w, avSmallH: avSmall.h,
+      heroIsA: s.heroVariant === 0, heroIsB: s.heroVariant === 1,
+      heroAColor: s.heroVariant === 0 ? '#0b0813' : '#8b84a8', heroABg: s.heroVariant === 0 ? '#22d3ee' : 'transparent',
+      heroBColor: s.heroVariant === 1 ? '#0b0813' : '#8b84a8', heroBBg: s.heroVariant === 1 ? '#f472b6' : 'transparent',
+      setHeroA: () => this.setState({ heroVariant: 0 }), setHeroB: () => this.setState({ heroVariant: 1 }),
+      stats, attrs, achievements,
+      bio: 'Desenvolvedor fullstack que trata cada projeto como uma fase a ser concluída com capricho. Gosto de transformar ideias em produtos reais — do banco de dados à interface — combinando código limpo, boa experiência de uso e um toque de IA quando faz sentido. Sempre em busca da próxima conquista.',
+      skillsView: s.skillsView, viewInv: s.skillsView === 'inventory', viewTree: s.skillsView === 'tree',
+      invColor: s.skillsView === 'inventory' ? '#0b0813' : '#8b84a8', invBg: s.skillsView === 'inventory' ? '#22d3ee' : 'transparent',
+      treeColor: s.skillsView === 'tree' ? '#0b0813' : '#8b84a8', treeBg: s.skillsView === 'tree' ? '#a78bfa' : 'transparent',
+      setInv: () => this.setState({ skillsView: 'inventory' }), setTree: () => this.setState({ skillsView: 'tree' }),
+      skills, branches, projects, experiences, socials,
+      fName: s.fName, fEmail: s.fEmail, fMsg: s.fMsg, sent: s.sent, notSent: !s.sent,
+      onName: e => this.setState({ fName: e.target.value }),
+      onEmail: e => this.setState({ fEmail: e.target.value }),
+      onMsg: e => this.setState({ fMsg: e.target.value }),
+      onSubmit: e => { if (e && e.preventDefault) e.preventDefault(); this.setState({ sent: true }); },
+      resetForm: () => this.setState({ sent: false, fName: '', fEmail: '', fMsg: '' }),
+      year: new Date().getFullYear(),
+    };
+  }
+}
+</script>
+</body>
+</html>

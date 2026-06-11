@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Tokens de tema do portfólio (Tailwind v4 — @theme).
+   Geram utilities: bg-bg, text-violet, font-pixel, etc.
+   A paleta vem do design original (.dc) em _legacy/.
+   O toggle RETRO/MODERN (fase futura) vai sobrescrever
+   estas variáveis num data-attribute no <html>.
+   ============================================================ */
+@theme {
+  /* superfícies */
+  --color-bg: #0b0813;
+  --color-surface: #100c1c;
+  --color-line: #2a2342;
+
+  /* texto */
+  --color-ink: #e7e3f5;
+  --color-ink-dim: #8b84a8;
+
+  /* acentos */
+  --color-violet: #a78bfa;
+  --color-violet-deep: #6d28d9;
+  --color-cyan: #22d3ee;
+  --color-pink: #f472b6;
+  --color-gold: #fbbf24;
+  --color-emerald: #34d399;
+
+  /* fontes */
+  --font-pixel: "Press Start 2P", monospace;
+  --font-body: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "VT323", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-violet-deep);
+  color: #fff;
+}

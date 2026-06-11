@@ -18,8 +18,8 @@ export const projects: Project[] = [
   // Projeto real — landing em produção (../não-clonado; repo privado).
   {
     name: 'LOTÉRICA CENTRAL',
-    desc: 'Landing page de venda de bolões oficiais da Caixa para a Lotérica Central de Alagoinhas. Um painel admin faz web scraping dos bolões no marketplace da Caixa e libera uma quantidade para venda online.',
-    tech: ['Next.js', 'TypeScript', 'Web Scraping', 'Railway'],
+    desc: 'Landing page de venda de bolões oficiais da Caixa para a Lotérica Central de Alagoinhas. O painel administrativo, com acesso protegido por 2FA, coleta os bolões disponíveis no marketplace da Caixa via web scraping e libera lotes para venda online.',
+    tech: ['Next.js', 'TypeScript', 'Web Scraping', '2FA', 'Railway'],
     status: 'EM PROGRESSO',
     xp: 900,
     demoUrl: 'https://landingpage-lotericacentral-production.up.railway.app/',

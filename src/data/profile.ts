@@ -11,8 +11,7 @@ export const profile = {
 
   hero: {
     kicker: 'INSIRA UMA FICHA  •  1 PLAYER',
-    tagline:
-      'Desenvolvedor Fullstack construindo produtos web do banco de dados à interface — com código limpo e um toque de IA.',
+    tagline: 'Minha build é fullstack — transformo ideias em produtos web reais.',
     primaryCta: 'ENTER PORTFOLIO',
     secondaryCta: 'VER QUESTS',
   },

@@ -7,10 +7,10 @@ import type { Experience } from '../types'
 export const experiences: Experience[] = [
   {
     phase: 'FASE 01',
-    title: 'Estágio Frontend',
-    org: 'Startup local',
-    year: '2021',
-    desc: 'Primeiros componentes em React e correção de bugs em produção.',
+    title: 'Faculdade de Análise e Desenvolvimento de Sistemas',
+    org: '',
+    year: '2018.1',
+    desc: 'Aprendendo os conceitos e a lógica de programação.',
     xp: 300,
     done: true,
     current: false,

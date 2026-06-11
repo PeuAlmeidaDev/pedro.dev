@@ -44,7 +44,7 @@ export default function Experience() {
                     </span>
                   </div>
                   <h3 className="mb-1 font-body text-[19px] font-bold text-[#f5f3ff]">{ex.title}</h3>
-                  <p className="mb-2.5 font-body text-[13px] text-cyan">{ex.org}</p>
+                  {ex.org && <p className="mb-2.5 font-body text-[13px] text-cyan">{ex.org}</p>}
                   <p className="m-0 font-body text-sm leading-relaxed text-ink-soft">{ex.desc}</p>
                 </div>
               </div>

@@ -7,6 +7,7 @@ import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
 import Projects from './components/Projects'
+import Experience from './components/Experience'
 
 const SECTION_IDS = navItems.map((n) => n.id)
 
@@ -24,11 +25,12 @@ export default function App() {
         <About />
         <Skills />
         <Projects />
+        <Experience />
 
         {/* Seções ainda não migradas — placeholders para nav/scroll funcionarem.
             Serão substituídas nas próximas fases. */}
         {navItems
-          .filter((n) => !['home', 'about', 'skills', 'projects'].includes(n.id))
+          .filter((n) => !['home', 'about', 'skills', 'projects', 'experience'].includes(n.id))
           .map((n) => (
             <Placeholder key={n.id} id={n.id} label={n.label} />
           ))}

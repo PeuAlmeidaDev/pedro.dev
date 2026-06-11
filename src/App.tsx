@@ -1,38 +1,44 @@
-/**
- * App raiz — placeholder da Fase 0.
- * Serve só para confirmar visualmente que o setup (Vite + React + TS +
- * Tailwind v4 + tokens de tema + fontes pixel) está funcionando.
- * Será substituído pelas seções reais a partir da Fase 3.
- */
+import { navItems } from './data/nav'
+import { useScrollSpy } from './hooks/useScrollSpy'
+import Background from './components/Background'
+import Navbar from './components/Navbar'
+import MiniMap from './components/MiniMap'
+import Hero from './components/Hero'
+
+const SECTION_IDS = navItems.map((n) => n.id)
+
 export default function App() {
+  const { progress, activeId } = useScrollSpy(SECTION_IDS)
+
   return (
-    <main className="grid min-h-screen place-items-center bg-bg px-6 text-center">
-      <div>
-        <p className="mb-4 font-pixel text-xs tracking-widest text-cyan">
-          SETUP OK · FASE 0
-        </p>
-        <h1 className="font-pixel text-2xl leading-relaxed text-violet sm:text-3xl">
-          PEDRO<span className="text-cyan">.dev</span>
-        </h1>
-        <p className="mt-6 font-body text-ink-dim">
-          Vite + React + TypeScript + Tailwind v4 prontos.
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-2">
-          {[
-            ['bg-violet', 'violet'],
-            ['bg-cyan', 'cyan'],
-            ['bg-pink', 'pink'],
-            ['bg-gold', 'gold'],
-            ['bg-emerald', 'emerald'],
-          ].map(([cls, name]) => (
-            <span
-              key={name}
-              className={`${cls} h-8 w-8 border-2 border-line`}
-              title={name}
-            />
+    <div className="relative min-h-screen">
+      <Background />
+      <Navbar items={navItems} activeId={activeId} progress={progress} />
+      <MiniMap items={navItems} activeId={activeId} />
+
+      <main className="relative z-10">
+        <Hero />
+
+        {/* Seções ainda não migradas — placeholders para nav/scroll funcionarem.
+            Serão substituídas nas próximas fases. */}
+        {navItems
+          .filter((n) => n.id !== 'home')
+          .map((n) => (
+            <Placeholder key={n.id} id={n.id} label={n.label} />
           ))}
-        </div>
-      </div>
-    </main>
+      </main>
+    </div>
+  )
+}
+
+function Placeholder({ id, label }: { id: string; label: string }) {
+  return (
+    <section
+      id={id}
+      className="mx-auto flex min-h-[70vh] max-w-[1180px] flex-col items-center justify-center gap-4 px-[22px] text-center"
+    >
+      <span className="font-pixel text-[11px] text-cyan">{label}</span>
+      <p className="font-mono text-2xl text-ink-dim">// seção em construção</p>
+    </section>
   )
 }

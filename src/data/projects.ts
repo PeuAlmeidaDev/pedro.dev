@@ -30,7 +30,7 @@ export const projects: Project[] = [
     name: 'BEATRIZ STROBEL',
     desc: 'Landing page para a esteticista Beatriz Strobel divulgar e vender seus atendimentos — vitrine de serviços com preços, depoimentos e agendamento direto por formulário de contato e WhatsApp.',
     tech: ['Next.js', 'TypeScript', 'Tailwind', 'Vercel'],
-    status: 'COMPLETO',
+    status: 'EM PROGRESSO',
     xp: 700,
     demoUrl: 'https://beatrizstrobel-estetica.vercel.app/',
     repoUrl: 'https://github.com/PeuAlmeidaDev/beatrizstrobel-estetica',

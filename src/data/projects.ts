@@ -35,6 +35,16 @@ export const projects: Project[] = [
     demoUrl: 'https://beatrizstrobel-estetica.vercel.app/',
     repoUrl: 'https://github.com/PeuAlmeidaDev/beatrizstrobel-estetica',
   },
+  // Projeto real — dashboard restrito em produção (Railway, repo privado).
+  {
+    name: 'SISTEMA AFILIADOS',
+    desc: 'Painel de gestão da rede de afiliados do Bolão Caixa (Lotérica Central). Acesso restrito com login por e-mail/senha para a equipe e por CPF para afiliados, administrando a venda dos bolões.',
+    tech: ['Next.js', 'TypeScript', 'Auth', 'Railway'],
+    status: 'EM PROGRESSO',
+    xp: 800,
+    demoUrl: 'https://lotericacentral.up.railway.app/',
+    // repoUrl: privado (404) — adicionar quando o repositório for público
+  },
   {
     name: 'NEON COMMERCE',
     desc: 'Plataforma de e-commerce com checkout em tempo real, carrinho persistente e painel administrativo completo.',

@@ -36,7 +36,7 @@ export const attributes: Attribute[] = [
     label: 'CAFEÍNA',
     value: 10,
     color: 'pink',
-    buff: { icon: '☕', label: 'CAPUCCINO', bonus: '+99', color: 'coffee' },
+    buff: { icon: '☕', label: 'CAPUCCINO', bonus: '+90', color: 'coffee' },
   },
 ]
 

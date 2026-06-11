@@ -6,7 +6,7 @@ import type { Stat, Attribute, Achievement } from '../types'
  */
 export const profile = {
   brand: 'PEDRO',
-  level: 24,
+  level: 29,
   role: 'Desenvolvedor Fullstack',
 
   hero: {
@@ -23,9 +23,9 @@ export const stats: Stat[] = [
   { label: 'NOME', value: 'Pedro' },
   { label: 'CLASSE', value: 'Desenvolvedor Fullstack' },
   { label: 'ESPECIALIDADE', value: 'Web Apps & APIs' },
-  { label: 'NÍVEL', value: 'LV. 24' },
+  { label: 'NÍVEL', value: `LV. ${profile.level}` },
   { label: 'LOCAL', value: 'Colinas de Pituaçu, BA' },
-  { label: 'ESTILO', value: 'Remoto / Híbrido' },
+  { label: 'ESTILO', value: 'Remoto / Híbrido / Presencial' },
 ]
 
 export const attributes: Attribute[] = [

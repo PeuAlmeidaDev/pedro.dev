@@ -8,6 +8,8 @@ import About from './components/About'
 import Skills from './components/Skills'
 import Projects from './components/Projects'
 import Experience from './components/Experience'
+import Contact from './components/Contact'
+import Footer from './components/Footer'
 
 const SECTION_IDS = navItems.map((n) => n.id)
 
@@ -26,27 +28,10 @@ export default function App() {
         <Skills />
         <Projects />
         <Experience />
-
-        {/* Seções ainda não migradas — placeholders para nav/scroll funcionarem.
-            Serão substituídas nas próximas fases. */}
-        {navItems
-          .filter((n) => !['home', 'about', 'skills', 'projects', 'experience'].includes(n.id))
-          .map((n) => (
-            <Placeholder key={n.id} id={n.id} label={n.label} />
-          ))}
+        <Contact />
       </main>
-    </div>
-  )
-}
 
-function Placeholder({ id, label }: { id: string; label: string }) {
-  return (
-    <section
-      id={id}
-      className="mx-auto flex min-h-[70vh] max-w-[1180px] flex-col items-center justify-center gap-4 px-[22px] text-center"
-    >
-      <span className="font-pixel text-[11px] text-cyan">{label}</span>
-      <p className="font-mono text-2xl text-ink-dim">// seção em construção</p>
-    </section>
+      <Footer />
+    </div>
   )
 }

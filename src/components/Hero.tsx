@@ -43,11 +43,18 @@ export default function Hero() {
         {/* avatar */}
         <div className="mb-[26px] inline-block animate-floaty-slow">
           <div className="relative inline-block border-[3px] border-cyan bg-[#0e0a18] p-1.5 shadow-[0_0_0_3px_#0b0813,0_0_28px_rgba(34,211,238,.5)]">
-            <img
-              src="/assets/avatar.png"
-              alt="Avatar pixelado de Pedro"
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster="/assets/avatar.png"
+              aria-label="Avatar animado de Pedro"
               className="block object-cover [image-rendering:pixelated] [height:clamp(120px,22vw,170px)] [width:clamp(120px,22vw,170px)]"
-            />
+            >
+              <source src="/assets/avatar-hero-section.webm" type="video/webm" />
+              <source src="/assets/avatar-hero-section.mp4" type="video/mp4" />
+            </video>
             <span className="absolute -bottom-[11px] left-1/2 -translate-x-1/2 whitespace-nowrap border-2 border-[#fde68a] bg-gold px-[7px] py-1 font-pixel text-[8px] text-bg">
               LV. {profile.level}
             </span>

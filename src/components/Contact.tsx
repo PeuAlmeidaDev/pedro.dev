@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
+import type { Social } from '../types'
 import { socials } from '../data/socials'
 import SectionHeading from './SectionHeading'
 
@@ -106,17 +107,7 @@ export default function Contact() {
             </p>
             <div className="flex flex-col gap-[11px]">
               {socials.map((so) => (
-                <a
-                  key={so.label}
-                  href={so.href}
-                  className="flex items-center justify-between gap-3 border-2 border-edge bg-[#0e0a18] px-4 py-[15px] no-underline transition-transform hover:translate-x-1.5 hover:border-[var(--sc)]"
-                  style={{ ['--sc' as string]: `var(--color-${so.color})` }}
-                >
-                  <span className="font-pixel text-[10px]" style={{ color: `var(--color-${so.color})` }}>
-                    {so.label}
-                  </span>
-                  <span className="font-body text-sm text-ink-soft">{so.handle}</span>
-                </a>
+                <SocialRow key={so.label} social={so} />
               ))}
             </div>
           </div>
@@ -158,5 +149,39 @@ function TerminalField({
         className="mb-4 w-full border-2 border-[#1f5e4a] bg-[#0c1f17] px-3 py-2.5 font-mono text-[19px] text-[#d1fae5] outline-none focus:border-[#34d399] focus:shadow-[0_0_10px_rgba(52,211,153,.3)]"
       />
     </>
+  )
+}
+
+function SocialRow({ social }: { social: Social }) {
+  const color = `var(--color-${social.color})`
+  const base = 'flex items-center justify-between gap-3 border-2 border-edge bg-[#0e0a18] px-4 py-[15px]'
+
+  const inner = (
+    <>
+      <span className="font-pixel text-[10px]" style={{ color }}>
+        {social.label}
+      </span>
+      <span className="font-body text-sm text-ink-soft">{social.handle}</span>
+    </>
+  )
+
+  if (social.disabled) {
+    return (
+      <div className={`${base} cursor-not-allowed opacity-45`} aria-disabled="true" title="Em breve">
+        {inner}
+      </div>
+    )
+  }
+
+  const external = social.href.startsWith('http')
+  return (
+    <a
+      href={social.href}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      className={`${base} no-underline transition-transform hover:translate-x-1.5 hover:border-[var(--sc)]`}
+      style={{ ['--sc' as string]: color }}
+    >
+      {inner}
+    </a>
   )
 }

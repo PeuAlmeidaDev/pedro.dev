@@ -84,4 +84,6 @@ export interface Social {
   handle: string
   color: string
   href: string
+  /** quando true, aparece inativo (não clicável) */
+  disabled?: boolean
 }

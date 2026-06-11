@@ -11,6 +11,7 @@ import Experience from './components/Experience'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import MusicCoin from './components/MusicCoin'
+import WhatsappButton from './components/WhatsappButton'
 
 const SECTION_IDS = navItems.map((n) => n.id)
 
@@ -33,6 +34,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <WhatsappButton />
       <MusicCoin />
     </div>
   )

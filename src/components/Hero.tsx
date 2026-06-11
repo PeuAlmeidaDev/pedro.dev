@@ -15,7 +15,7 @@ export default function Hero() {
       {/* backdrop cyberpunk */}
       <div aria-hidden className="absolute inset-0 overflow-hidden bg-bg">
         <img
-          src="/assets/city-bg.png"
+          src="/assets/city-bg.webp"
           alt=""
           className="absolute inset-0 h-full w-full object-cover object-bottom [image-rendering:pixelated]"
         />
@@ -48,7 +48,7 @@ export default function Hero() {
               loop
               muted
               playsInline
-              poster="/assets/avatar.png"
+              poster="/assets/avatar.webp"
               aria-label="Avatar animado de Pedro"
               className="block object-cover [image-rendering:pixelated] [height:clamp(120px,22vw,170px)] [width:clamp(120px,22vw,170px)]"
             >

@@ -28,7 +28,7 @@ export default function Navbar({ items, activeId, progress }: NavbarProps) {
           className="flex cursor-[inherit] items-center gap-3"
         >
           <img
-            src="/assets/avatar.png"
+            src="/assets/avatar.webp"
             alt=""
             className="h-[34px] w-[34px] border-2 border-violet object-cover [image-rendering:pixelated] shadow-[0_0_10px_rgba(167,139,250,.5)]"
           />

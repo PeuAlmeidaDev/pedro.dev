@@ -17,7 +17,7 @@ export default function About() {
           <div className="mb-[22px] flex items-center gap-[18px] border-b-2 border-line pb-5">
             <div className="shrink-0 border-2 border-edge bg-[#0e0a18] p-1.5 shadow-[0_0_0_2px_#0b0813]">
               <img
-                src="/assets/avatar.png"
+                src="/assets/avatar.webp"
                 alt="Avatar pixelado de Pedro"
                 className="block h-[84px] w-[84px] object-cover [image-rendering:pixelated]"
               />

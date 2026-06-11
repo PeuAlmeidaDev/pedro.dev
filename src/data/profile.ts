@@ -23,7 +23,7 @@ export const stats: Stat[] = [
   { label: 'NOME', value: 'Pedro' },
   { label: 'CLASSE', value: 'Desenvolvedor Fullstack' },
   { label: 'ESPECIALIDADE', value: 'Web Apps & APIs' },
-  { label: 'NÍVEL', value: `LV. ${profile.level}` },
+  { label: 'IDADE', value: '29' },
   { label: 'LOCAL', value: 'Colinas de Pituaçu, BA' },
   { label: 'ESTILO', value: 'Remoto / Híbrido / Presencial' },
 ]

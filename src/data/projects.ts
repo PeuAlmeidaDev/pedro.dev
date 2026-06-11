@@ -15,6 +15,16 @@ export const projects: Project[] = [
     demoUrl: 'https://craftmind-production.up.railway.app/',
     repoUrl: 'https://github.com/PeuAlmeidaDev/CraftMind',
   },
+  // Projeto real — landing em produção (../não-clonado; repo privado).
+  {
+    name: 'LOTÉRICA CENTRAL',
+    desc: 'Landing page de venda de bolões oficiais da Caixa para a Lotérica Central de Alagoinhas. Um painel admin faz web scraping dos bolões no marketplace da Caixa e libera uma quantidade para venda online.',
+    tech: ['Next.js', 'TypeScript', 'Web Scraping', 'Railway'],
+    status: 'EM PROGRESSO',
+    xp: 900,
+    demoUrl: 'https://landingpage-lotericacentral-production.up.railway.app/',
+    // repoUrl: privado (404) — adicionar quando o repositório for público
+  },
   {
     name: 'NEON COMMERCE',
     desc: 'Plataforma de e-commerce com checkout em tempo real, carrinho persistente e painel administrativo completo.',

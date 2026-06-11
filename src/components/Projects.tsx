@@ -62,14 +62,16 @@ function ProjectCard({ project }: { project: Project }) {
         <span className="font-pixel text-[8px] text-gold">★ +{project.xp} XP</span>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <CardLink href={project.demoUrl} variant="primary">
-          VER
-        </CardLink>
-        <CardLink href={project.repoUrl} variant="ghost">
-          GITHUB
-        </CardLink>
-      </div>
+      {(project.demoUrl || project.repoUrl) && (
+        <div className="flex flex-wrap gap-2">
+          <CardLink href={project.demoUrl} variant="primary">
+            VER
+          </CardLink>
+          <CardLink href={project.repoUrl} variant="ghost">
+            GITHUB
+          </CardLink>
+        </div>
+      )}
     </article>
   )
 }
@@ -83,7 +85,9 @@ function CardLink({
   variant: 'primary' | 'ghost'
   children: React.ReactNode
 }) {
-  const external = Boolean(href)
+  // sem URL real → não renderiza botão morto
+  if (!href) return null
+
   const cls =
     variant === 'primary'
       ? 'border-2 border-[#a5f3fc] bg-cyan text-bg shadow-[0_3px_0_#0e7490] active:translate-y-[3px] active:shadow-none'
@@ -91,8 +95,9 @@ function CardLink({
 
   return (
     <a
-      href={href ?? '#'}
-      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       className={`px-[11px] py-2.5 font-pixel text-[8px] no-underline transition-transform ${cls}`}
     >
       {children}

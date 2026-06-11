@@ -44,7 +44,7 @@ export const achievements: Achievement[] = [
   { icon: '★', name: 'First Commit', desc: 'Primeiro commit em produção', unlocked: true },
   { icon: '⚔', name: 'Bug Slayer', desc: '100+ bugs eliminados', unlocked: true },
   { icon: '☾', name: 'Night Owl', desc: 'Deploy depois da meia-noite', unlocked: true },
-  { icon: '↻', name: 'Automatizador', desc: 'Automatiza o trabalho repetitivo', unlocked: true },
+  { icon: '↻', name: 'Autopilot', desc: 'Automatiza o trabalho repetitivo', unlocked: true },
   { icon: '⚙', name: 'Solver', desc: 'Resolvedor de problemas', unlocked: true },
   { icon: '?', name: '???', desc: 'Conquista secreta bloqueada', unlocked: false },
 ]

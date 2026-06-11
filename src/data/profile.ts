@@ -20,7 +20,7 @@ export const profile = {
 } as const
 
 export const stats: Stat[] = [
-  { label: 'NOME', value: 'Pedro' },
+  { label: 'NOME', value: 'Pedro de Brito Almeida' },
   { label: 'CLASSE', value: 'Desenvolvedor Fullstack' },
   { label: 'ESPECIALIDADE', value: 'Web Apps & APIs' },
   { label: 'IDADE', value: '30' },

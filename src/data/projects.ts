@@ -54,4 +54,13 @@ export const projects: Project[] = [
     // demoUrl: adicionar após o deploy (Vercel/Netlify)
     // repoUrl: adicionar após publicar no GitHub
   },
+  {
+    name: 'PokeChampion Meta',
+    desc: 'Webapp para navegar os times campeões de Pokémon (VGC 2026) de forma mais agradável que a planilha pública: grid de times com sprites, detalhe completo de cada Pokémon (item, habilidade, nature, Tera, EVs e golpes) e busca instantânea. Dados re-ingeridos automaticamente quando a planilha muda.',
+    tech: ['Fastify', 'React', 'TypeScript', 'Zod'],
+    status: 'EM PROGRESSO',
+    xp: 1100,
+    demoUrl: "https://pokemon-championsserver-production.up.railway.app/",
+    repoUrl: "https://github.com/PeuAlmeidaDev/PokeChampions-Teams"
+  },
 ]

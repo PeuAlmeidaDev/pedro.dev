@@ -1,6 +1,9 @@
 import { profile } from '../data/profile'
 import { scrollToSection } from '../hooks/useScrollSpy'
 
+/** Currículo em PDF (versão sem foto) servido estaticamente de public/. */
+const CV_PDF = '/Pedro-Almeida-CV.pdf'
+
 /**
  * Seção de abertura (#home) — título arcade, avatar e CTAs.
  * (O seletor LAYOUT A/B do design original foi descartado: mantivemos
@@ -86,6 +89,13 @@ export default function Hero() {
           >
             {profile.hero.secondaryCta}
           </button>
+          <a
+            href={CV_PDF}
+            download
+            className="border-[3px] border-gold bg-transparent px-[26px] py-[18px] font-pixel text-[13px] text-gold no-underline shadow-[0_6px_0_#b45309] transition-[transform,border-color] hover:border-[#fde68a] active:translate-y-1.5 active:shadow-none"
+          >
+            ▼ BAIXAR CV
+          </a>
         </div>
 
         <p className="mt-[34px] animate-blink font-pixel text-[10px] text-ink-dim">

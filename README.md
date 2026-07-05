@@ -1,4 +1,4 @@
-# Pedro.dev — Portfólio
+https://www.linkedin.com/in/pedro-almeida-095b33374/# Pedro.dev — Portfólio
 
 Portfólio pessoal em estilo **RPG retro / cyberpunk**: skills, projetos como _quests_ e
 a carreira como uma _jornada de fases_. Divertido na superfície, sólido por baixo — rápido,

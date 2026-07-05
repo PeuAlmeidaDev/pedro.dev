@@ -31,3 +31,7 @@ dist-ssr
 # Claude Code (config local — fora do versionamento)
 CLAUDE.md
 .claude/
+
+# Currículo (foto + CV completo) — mantido local, fora do repo público
+cv/
+image.png
